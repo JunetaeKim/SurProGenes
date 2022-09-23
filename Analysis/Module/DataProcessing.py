@@ -4,6 +4,8 @@ import pandas as pd
 import pickle
 import tensorflow as tf
 
+## Specify data directory
+DataLOC = '../Data'
 
 def Restratification(RestratDATA):
     
@@ -24,11 +26,11 @@ def Restratification(RestratDATA):
 
 def DataLoad ():
     
-    StackedData = np.load('../Data/ProcessedData/StakedgData_GroupNorm.npy', allow_pickle=True)
-    IntToGene = np.load('../Data/ProcessedData/IntToGene_GroupNorm.npy', allow_pickle=True).tolist()
-    DistMat = np.load('../Data/ProcessedData/DisimInd_GroupNorm.npy', allow_pickle=True)
-    TTE = np.load('../Data/ProcessedData/TTE_GroupNorm.npy', allow_pickle=True)
-    EVENT = np.load('../Data/ProcessedData/Event_GroupNorm.npy', allow_pickle=True)
+    StackedData = np.load(DataLOC+'/ProcessedData/StakedgData_GroupNorm.npy', allow_pickle=True)
+    IntToGene = np.load(DataLOC+'/ProcessedData/IntToGene_GroupNorm.npy', allow_pickle=True).tolist()
+    DistMat = np.load(DataLOC+'/ProcessedData/DisimInd_GroupNorm.npy', allow_pickle=True)
+    TTE = np.load(DataLOC+'/ProcessedData/TTE_GroupNorm.npy', allow_pickle=True)
+    EVENT = np.load(DataLOC+'/ProcessedData/Event_GroupNorm.npy', allow_pickle=True)
 
     NegativeMask = ((TTE[:,None] - TTE[None])<0).astype('int')
     NegativeEvent = NegativeMask * EVENT[None]
@@ -44,7 +46,7 @@ def DataLoad ():
     TrIndEmbeddMask = tf.constant(TrIndEmbeddMask, dtype=tf.float32)
     
     # load Merged data
-    with open('../Data/ProcessedData/LogAnalData.pickle', 'rb') as f:
+    with open(DataLOC+'/ProcessedData/LogAnalData.pickle', 'rb') as f:
         LogAnalData = pickle.load(f)
 
     return StackedData, IntToGene, TTE, EVENT, TrIndEmbeddMask, ReferencePatIDLong, ReferencePatIDShort, NormDismInd, LogAnalData

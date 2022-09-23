@@ -8,12 +8,15 @@ from lifelines import CoxPHFitter
 import statsmodels.api as sm
 
 import venn
+import umap
 
 from tensorflow.keras.models import Model ,load_model
 import tensorflow as tf
+from tensorflow.keras import backend as K
+
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
-
+import seaborn as sns
 
 
 #---------------------------------------------------------------------------------------------------------------------------###
@@ -54,9 +57,27 @@ class Components:
         self.PredICosCLSim = Model(InpInd,ICosCLSim)([1]).numpy()
         self.PredFCosCLSim = Model(InpFeat,FCosCLSim)([1])[1:].numpy()
         
+        self.PredIndCentroid = Model(InpInd,IndCentroid)([1]).numpy()
+        self.PredFeatCentroid = Model([InpInd,InpFeat],FeatCentroid)(([1],[1])).numpy()
+        
+        self.IndCentMembers = np.argmax(self.PredICosCLSim, axis=-1)
+        self.FeatGroupLables = np.argmax(self.PredFCosCLSim, axis=-1)
+        
+        self.PredIndEmbedd = Model(InpInd,IndEmbeddWeig)([1])[1:].numpy()
+        self.PredFeatEmbedd = Model(InpFeat,FeatEmbeddWeig)([1])[1:].numpy()
+
+        # Assigning gene and individual vectors to corresponding clusters
         self.IndCentMembers = np.argmax(self.PredICosCLSim, axis=-1)
         self.FeatGroupLables = np.argmax(self.PredFCosCLSim, axis=-1)
 
+        # Calculating risk level
+        PredIndEmbeddReferenceLong = Model(InpInd,IndEmbeddReferenceLong )([1]).numpy()
+        PredIndEmbeddReferenceLongNorm = tf.linalg.l2_normalize(PredIndEmbeddReferenceLong, axis=-1)
+        PredIndEmbeddNorm = tf.linalg.l2_normalize(self.PredIndEmbedd, axis=-1)
+        IndRefCosSim = tf.matmul(PredIndEmbeddNorm, PredIndEmbeddReferenceLongNorm, transpose_b=True)
+        IndRefCosSim = K.clip(IndRefCosSim, -1. + K.epsilon(), 1.-K.epsilon())
+        self.IndRefTheta = tf.acos(IndRefCosSim).numpy()/np.pi
+        
         
         # Selecting gene names for the post-hoc analysis
         SelectedGeneID = []
@@ -317,3 +338,295 @@ class Components:
             EachPlot(self.PostHocSet[['tumor_type','time','event','IndCentMembers']],nrows,ncols)
         else:
             Warning.warn("Wrong mode value, only mode values 'pooled', and 'each' are allowed.")
+
+    
+    # PerformUMPA-------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+        
+    def PerformUMPA (self, SelGeneLoc=False, **UMAP_Parameters):
+        
+        self.UMPA_run = True
+        assert self.CommonSetGene_run , '''Error: CommonSetGene has not been performed yet. You must run CommonSetGene and then try again.'''
+      
+    
+        if SelGeneLoc.tolist()==False:
+            self.SelGeneLoc = self.ExGeneLocList
+        else:
+            self.SelGeneLoc = SelGeneLoc
+        
+        UMAPFeatEmbedd = self.PredFeatEmbedd[self.SelGeneLoc]
+            
+
+        ## Performing UMAP to reduce the dimensionality of patient and gene vectors
+        TotalFeatPred = np.concatenate([ UMAPFeatEmbedd, self.PredIndEmbedd, self.PredIndCentroid, self.PredFeatCentroid])
+
+        TotaFeatUMAP = umap.UMAP(**UMAP_Parameters ) # n_neighbors=20, min_dist=1.0,  n_neighbors=30, min_dist=0.2
+        TotaFeatUMAP.fit(TotalFeatPred)
+        print(TotaFeatUMAP)
+        TotaFeatUMAPProj = TotaFeatUMAP.transform(TotalFeatPred)
+
+        self.PredFeatX = TotaFeatUMAPProj[: UMAPFeatEmbedd.shape[0], 0]
+        self.PredFeatY = TotaFeatUMAPProj[:UMAPFeatEmbedd.shape[0], 1]
+
+        self.PredIndX = TotaFeatUMAPProj[UMAPFeatEmbedd.shape[0]: (UMAPFeatEmbedd.shape[0] + self.PredIndEmbedd.shape[0]), 0]
+        self.PredIndY = TotaFeatUMAPProj[UMAPFeatEmbedd.shape[0]: (UMAPFeatEmbedd.shape[0] + self.PredIndEmbedd.shape[0]), 1]
+        
+        
+    # IndRepresent--------------------------------------------------------------------------------------------------------------------------------------------------------------------          
+            
+    def IndRepresent (self, mode='pooled',nrows=0,ncols=0):
+        
+        assert self.UMPA_run, '''Error: UMAP has not been performed yet. You must run UMAP(PerformUMPA()) and then try again.'''
+        
+        RefPatLongG = self.IndCentMembers[self.ReferencePatIDLong]
+        RefPatShortG = 1- RefPatLongG
+            
+        def PooledPlot ():
+            
+            if self.IndCentMembers[self.ReferencePatIDLong] == 0:
+                palette = ['yellowgreen', 'red']
+            else:
+                palette = ['red', 'yellowgreen']
+
+            plt.figure(figsize=(10,10))
+
+            for i in range(self.NCL_Ind): #IndCentEvenMembers
+                plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=self.IndRefTheta[self.IndCentMembers==i]*1.1, marker='*', 
+                            s =self.IndRefTheta[self.IndCentMembers==i]*200, color=palette[i], edgecolors='black',linewidth=0.5)
+
+            plt.scatter(self.PredIndX[self.ReferencePatIDShort], self.PredIndY[self.ReferencePatIDShort],  alpha=1, marker='P',  s =200, color=palette[RefPatShortG], edgecolors='black',linewidth=1.)    
+            plt.scatter(self.PredIndX[self.ReferencePatIDLong], self.PredIndY[self.ReferencePatIDLong],  alpha=1, marker='P',  s =200, color=palette[RefPatLongG], edgecolors='black',linewidth=1.)    
+            handles, labels = plt.gca().get_legend_handles_labels() # get existing handles and labels
+
+            CL1 = mlines.Line2D([], [], color=palette[RefPatLongG], marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk group')
+            CL2 = mlines.Line2D([], [], color=palette[RefPatShortG], marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk group')
+            CL3 = mlines.Line2D([], [], color=palette[RefPatLongG], marker='P', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk reference')
+            CL4 = mlines.Line2D([], [], color=palette[RefPatShortG], marker='P', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk reference')
+
+            handles.extend([CL1]+[CL2]+[CL3]+[CL4])
+            #leg = plt.legend(handles=handles,prop={'size': 12})
+            leg = plt.legend(handles=handles,prop={'size': 12}, loc='lower left',bbox_to_anchor=(0,-0.15), ncol=2)            
+            
+                        
+        def ComprehPlot ():
+            
+            palette = np.array(sns.color_palette("hls", len(self.UniqueTumors)+1))[1:]
+            if self.IndCentMembers[self.ReferencePatIDLong] == 0:
+                markers = ['.', '*']
+            else:
+                markers = ['*','.']
+
+            plt.figure(figsize=(10,10))
+
+            AddLeg = []
+
+            for idx, typeTumor in enumerate(self.UniqueTumors):
+                IndCentMembersSub=  self.IndCentMembers[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndXSub = self.PredIndX[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndYSub = self.PredIndY[self.PostHocSet['tumor_type'] == typeTumor]
+                IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
+
+
+                for i in range(self.NCL_Ind): #IndCentEvenMembers
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSub[IndCentMembersSub==i]*1.2, marker=markers[i], 
+                                s =IndRefThetaSub[IndCentMembersSub==i]*200, color=palette[idx], edgecolors='black',linewidth=1.2)
+
+                AddLeg.append(mlines.Line2D([], [], color=palette[idx], marker='s', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label=typeTumor))
+                
+            plt.scatter(self.PredIndX[self.ReferencePatIDShort], self.PredIndY[self.ReferencePatIDShort],  alpha=0.7, marker='P',  s =250, color='red', edgecolors='black',linewidth=2.)    
+            plt.scatter(self.PredIndX[self.ReferencePatIDLong], self.PredIndY[self.ReferencePatIDLong], alpha=0.7, marker='X',  s =200, color='yellowgreen', edgecolors='black',linewidth=2.)    
+
+            handles, labels = plt.gca().get_legend_handles_labels() # get existing handles and labels
+            CL1 = mlines.Line2D([], [], color='white', marker='.', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk group')
+            CL2 = mlines.Line2D([], [], color='white', marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk group')
+            CL3 = mlines.Line2D([], [], color='yellowgreen', marker='X', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk reference')
+            CL4 = mlines.Line2D([], [], color='red', marker='P', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk reference')
+
+            handles.extend(AddLeg+[CL1]+[CL2]+[CL3]+[CL4])
+            #leg = plt.legend(handles=handles,prop={'size': 12}, loc='upper right')
+            leg = plt.legend(handles=handles,prop={'size': 12}, loc='lower left',bbox_to_anchor=(0,-0.15), ncol=4)            
+
+                       
+        def EachPlot (nrows,ncols):
+            
+            assert nrows * ncols >= len(self.UniqueTumors), '''ERROR: The size arguments for subplot, norws (number of rows) and ncols (number of columns) were not passed correctly. 
+                Please provide the correct nrows and ncols parameters in arument.'''
+            
+            if nrows % 2 !=0:
+                nrows += 1
+            if ncols % 2 !=0:
+                ncols += 1
+        
+            if self.IndCentMembers[self.ReferencePatIDLong] == 0:
+                palette = ['yellowgreen', 'red']
+            else:
+                palette = ['red', 'yellowgreen']
+
+                
+            plt.figure(figsize=(14,14))
+            for idx, typeTumor in enumerate(self.UniqueTumors):
+                
+                IndCentMembersSub=  self.IndCentMembers[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndXSub = self.PredIndX[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndYSub = self.PredIndY[self.PostHocSet['tumor_type'] == typeTumor]
+                IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
+
+                plt.subplot(nrows,ncols,idx+1)
+                plt.subplots_adjust(hspace=0.15, wspace=0.12)
+                for i in range(self.NCL_Ind): #IndCentEvenMembers
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=0.5, marker='*', 
+                                s =100, color=palette[i], edgecolors='black',linewidth=0.5)
+                plt.title(typeTumor, fontsize = 24)  
+
+            handles, labels = plt.gca().get_legend_handles_labels() # get existing handles and labels
+            CL1 = mlines.Line2D([], [], color=palette[RefPatLongG], marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk group')
+            CL2 = mlines.Line2D([], [], color=palette[RefPatShortG], marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk group')
+
+            handles.extend([CL1]+[CL2])
+            plt.legend(handles=handles,prop={'size': 16}, loc='lower left',bbox_to_anchor=(-0.05,-0.15), ncol=ncols)
+                
+                
+        if mode == 'pooled':
+            PooledPlot()
+        elif mode == 'each':
+            EachPlot(nrows,ncols)
+        elif mode == 'comprehensive':
+            ComprehPlot()
+        else:
+            Warning.warn("Wrong mode value, only mode values 'pooled', 'each', and 'comprehensive' are allowed.")
+            
+            
+    # IndGeneRepresent--------------------------------------------------------------------------------------------------------------------------------------------------------------------          
+            
+    def IndGeneRepresent (self, mode='whole',nrows=0,ncols=0 ):
+        
+        RefPatLongG = self.IndCentMembers[self.ReferencePatIDLong]
+        RefPatShortG = 1- RefPatLongG
+        
+        self.ExFeatGLabel = np.argmax(self.PredFCosCLSim[self.SelGeneLoc], axis=1)
+        paletteTumor = np.array(sns.color_palette("hls", len(self.UniqueTumors)+1))[1:]
+        paletteUniqSet = np.array(sns.color_palette("hls", len(self.UniqSetGeneLoc)+1))
+        ClPaletee = np.array(sns.color_palette("hls", self.NCL_Feat+1)) 
+        
+        
+        def WholePlot ():
+        
+            if self.IndCentMembers[self.ReferencePatIDLong] == 0:
+                markers = ['.', '*']
+                palette = ['yellowgreen', 'red']
+            else:
+                markers = ['*','.']
+                palette = ['red', 'yellowgreen']
+
+            ## Plotting     
+            plt.figure(figsize=(18,9))
+
+
+            ## Comprehensive representation across cancer
+            plt.subplot(121)
+            plt.subplots_adjust(wspace=0.1)
+            AddLeg = []
+            for idx, typeTumor in enumerate(self.UniqueTumors):
+                IndCentMembersSub=  self.IndCentMembers[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndXSub = self.PredIndX[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndYSub = self.PredIndY[self.PostHocSet['tumor_type'] == typeTumor]
+                IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
+
+
+                for i in range(self.NCL_Ind): #IndCentEvenMembers
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSub[IndCentMembersSub==i]*1.2, marker=markers[i], 
+                                s =IndRefThetaSub[IndCentMembersSub==i]*200, color=paletteTumor[idx], edgecolors='black',linewidth=1.2)
+
+                AddLeg.append(mlines.Line2D([], [], color=paletteTumor[idx], marker='s', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label=typeTumor))
+
+
+            for i in np.unique(self.ExFeatGLabel):
+                plt.scatter(self.PredFeatX[self.ExFeatGLabel==i], self.PredFeatY[self.ExFeatGLabel==i],  alpha=0.8, marker='p',  s =80, color=ClPaletee[i], edgecolors='black',linewidth=1.2)
+
+
+            handles, labels = plt.gca().get_legend_handles_labels() # get existing handles and labels
+
+            CL1 = mlines.Line2D([], [], color='white', marker='.', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk group')
+            CL2 = mlines.Line2D([], [], color='white', marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk group')
+            CL5 = mlines.Line2D([], [], color='white', marker='p', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Genes')
+            handles.extend(AddLeg+[CL1]+[CL2]+[CL5])
+            #leg = plt.legend(handles=handles,prop={'size': 12}, loc='upper right')
+            leg = plt.legend(handles=handles,prop={'size': 12}, loc='lower left',bbox_to_anchor=(0,-0.15), ncol=4)            
+            plt.title('Comprehensive representation across cancer',fontsize = 15)
+            
+            AnnoLocAdjX = min(self.PredFeatX.min(),self.PredIndX.min()) - 1
+            AnnoLocAdjY = min(self.PredFeatY.min(),self.PredIndY.min()) - 7.8
+
+            plt.annotate('Selected cancer set: '+self.CommonSetKey + ',  N of genes: '+str(len(self.SelGeneLoc)),  xycoords='data', xy=(AnnoLocAdjX, AnnoLocAdjY),  
+                         va = "bottom", ha="left",  fontsize=13,color='darkorange',
+            bbox=dict(facecolor='none', edgecolor='lightgray', boxstyle='round,pad=0.5'),annotation_clip=False,xytext=(0, 0), textcoords='offset points')
+
+
+            ## Risk-oriented representation across cancer
+            plt.subplot(122)
+            for i in range(self.NCL_Ind): #IndCentEvenMembers
+                plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=self.IndRefTheta[self.IndCentMembers==i]*1.2, marker='*', 
+                            s =self.IndRefTheta[self.IndCentMembers==i]*200, color=palette[i], edgecolors='black',linewidth=0.5)
+
+
+            for i in np.unique(self.ExFeatGLabel):
+                plt.scatter(self.PredFeatX[self.ExFeatGLabel==i], self.PredFeatY[self.ExFeatGLabel==i],  alpha=0.8, marker='p',  s =80, color=ClPaletee[i], edgecolors='black',linewidth=1.2)
+
+            plt.scatter(self.PredIndX[self.ReferencePatIDShort], self.PredIndY[self.ReferencePatIDShort],  alpha=0.7, marker='P',  s =250, color='red', edgecolors='black',linewidth=2.)    
+            plt.scatter(self.PredIndX[self.ReferencePatIDLong], self.PredIndY[self.ReferencePatIDLong], alpha=0.7, marker='X',  s =200, color='yellowgreen', edgecolors='black',linewidth=2.)    
+            handles, labels = plt.gca().get_legend_handles_labels() # get existing handles and labels
+            CL1 = mlines.Line2D([], [], color='yellowgreen', marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk group')
+            CL2 = mlines.Line2D([], [], color='red', marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk group')
+            CL3 = mlines.Line2D([], [], color='yellowgreen', marker='X', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk reference')
+            CL4 = mlines.Line2D([], [], color='red', marker='P', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk reference')
+            CL5 = mlines.Line2D([], [], color='white', marker='p', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Genes')
+            handles.extend([CL1]+[CL2]+[CL3]+[CL4]+[CL5])
+            #leg = plt.legend(handles=handles,prop={'size': 12}, loc='upper right')
+            leg = plt.legend(handles=handles,prop={'size': 12}, loc='lower left',bbox_to_anchor=(0.0,-0.15), ncol=3)            
+            plt.title('Risk-oriented representation across cancer',fontsize = 15)
+            
+            
+            
+        def EachPlot ():
+
+            if self.IndCentMembers[self.ReferencePatIDLong] == 0:
+                palette = ['yellowgreen', 'red']
+            else:
+                palette = ['red', 'yellowgreen']
+
+
+            plt.figure(figsize=(14,14))
+            for idx, typeTumor in enumerate(self.UniqueTumors):
+
+                IndCentMembersSub=  self.IndCentMembers[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndXSub = self.PredIndX[self.PostHocSet['tumor_type'] == typeTumor]
+                PredIndYSub = self.PredIndY[self.PostHocSet['tumor_type'] == typeTumor]
+                IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
+
+                plt.subplot(nrows,ncols,idx+1)
+                plt.subplots_adjust(hspace=0.15)
+
+                for i in range(self.NCL_Ind): #IndCentEvenMembers
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSub[IndCentMembersSub==i]*1.1, marker='*', 
+                                s =IndRefThetaSub[IndCentMembersSub==i]*200, color=palette[i], edgecolors='black',linewidth=0.5)
+                for i in np.unique(self.ExFeatGLabel):
+                    plt.scatter(self.PredFeatX[self.ExFeatGLabel==i], self.PredFeatY[self.ExFeatGLabel==i],  alpha=0.8, marker='p',  s =80, color=ClPaletee[i], edgecolors='black',linewidth=1.2)
+
+                plt.title(typeTumor, fontsize = 15)  
+
+
+            handles, labels = plt.gca().get_legend_handles_labels() # get existing handles and labels
+            CL1 = mlines.Line2D([], [], color=palette[RefPatLongG], marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Low-risk group')
+            CL2 = mlines.Line2D([], [], color=palette[RefPatShortG], marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk group')
+            CL3 = mlines.Line2D([], [], color='white', marker='p', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='Genes')
+
+
+            handles.extend([CL1]+[CL2]+[CL3])
+            plt.legend(handles=handles,prop={'size': 12}, loc='lower left',bbox_to_anchor=(-1.2,-0.15), ncol=4)            
+
+            
+        if mode == 'whole':
+            WholePlot()
+        elif mode == 'each':
+            EachPlot()     
+        else:
+             Warning.warn("Wrong mode value, only mode values 'whole' and 'each' are allowed.")
