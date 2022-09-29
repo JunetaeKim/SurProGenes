@@ -379,19 +379,30 @@ class Components:
         
         RefPatLongG = self.IndCentMembers[self.ReferencePatIDLong]
         RefPatShortG = 1- RefPatLongG
-            
+        IndRefThetaSub = self.IndRefTheta
+        
         def PooledPlot ():
             
             if self.IndCentMembers[self.ReferencePatIDLong] == 0:
                 palette = ['yellowgreen', 'red']
+                LowRiskLabel=0
             else:
                 palette = ['red', 'yellowgreen']
+                LowRiskLabel=1
 
             plt.figure(figsize=(10,10))
-
+            
             for i in range(self.NCL_Ind): #IndCentEvenMembers
-                plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=self.IndRefTheta[self.IndCentMembers==i]*1.1, marker='*', 
-                            s =self.IndRefTheta[self.IndCentMembers==i]*200, color=palette[i], edgecolors='black',linewidth=0.5)
+                
+                if i == LowRiskLabel:
+                    IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                    IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                else:
+                    IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                    IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                        
+                plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=IndRefThetaSubDicho, marker='*', 
+                            s =120, color=palette[i], edgecolors='black',linewidth=0.5)
 
             plt.scatter(self.PredIndX[self.ReferencePatIDShort], self.PredIndY[self.ReferencePatIDShort],  alpha=1, marker='P',  s =200, color=palette[RefPatShortG], edgecolors='black',linewidth=1.)    
             plt.scatter(self.PredIndX[self.ReferencePatIDLong], self.PredIndY[self.ReferencePatIDLong],  alpha=1, marker='P',  s =200, color=palette[RefPatLongG], edgecolors='black',linewidth=1.)    
@@ -412,8 +423,10 @@ class Components:
             palette = np.array(sns.color_palette("hls", len(self.UniqueTumors)+1))[1:]
             if self.IndCentMembers[self.ReferencePatIDLong] == 0:
                 markers = ['.', '*']
+                LowRiskLabel=0
             else:
                 markers = ['*','.']
+                LowRiskLabel=1
 
             plt.figure(figsize=(10,10))
 
@@ -425,10 +438,17 @@ class Components:
                 PredIndYSub = self.PredIndY[self.PostHocSet['tumor_type'] == typeTumor]
                 IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
 
-
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
-                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSub[IndCentMembersSub==i]*1.2, marker=markers[i], 
-                                s =IndRefThetaSub[IndCentMembersSub==i]*200, color=palette[idx], edgecolors='black',linewidth=1.2)
+                    
+                    if i == LowRiskLabel:
+                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                    else:
+                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                    
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  marker=markers[i], 
+                                s =120, color=palette[idx], edgecolors='black',linewidth=1.2)
 
                 AddLeg.append(mlines.Line2D([], [], color=palette[idx], marker='s', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label=typeTumor))
                 
@@ -458,8 +478,10 @@ class Components:
         
             if self.IndCentMembers[self.ReferencePatIDLong] == 0:
                 palette = ['yellowgreen', 'red']
+                LowRiskLabel=0
             else:
                 palette = ['red', 'yellowgreen']
+                LowRiskLabel=1
 
                 
             plt.figure(figsize=(14,14))
@@ -473,8 +495,16 @@ class Components:
                 plt.subplot(nrows,ncols,idx+1)
                 plt.subplots_adjust(hspace=0.15, wspace=0.12)
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
-                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=0.5, marker='*', 
-                                s =100, color=palette[i], edgecolors='black',linewidth=0.5)
+                    
+                    if i == LowRiskLabel:
+                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                    else:
+                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                        
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSubDicho, marker='*', 
+                                s =90, color=palette[i], edgecolors='black',linewidth=0.5)
                 plt.title(typeTumor, fontsize = 24)  
 
             handles, labels = plt.gca().get_legend_handles_labels() # get existing handles and labels
@@ -482,7 +512,7 @@ class Components:
             CL2 = mlines.Line2D([], [], color=palette[RefPatShortG], marker='*', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label='High-risk group')
 
             handles.extend([CL1]+[CL2])
-            plt.legend(handles=handles,prop={'size': 16}, loc='lower left',bbox_to_anchor=(-0.05,-0.15), ncol=ncols)
+            plt.legend(handles=handles,prop={'size': 16}, loc='lower left',bbox_to_anchor=(-0.10,-0.2), ncol=ncols)
                 
                 
         if mode == 'pooled':
@@ -513,9 +543,11 @@ class Components:
             if self.IndCentMembers[self.ReferencePatIDLong] == 0:
                 markers = ['.', '*']
                 palette = ['yellowgreen', 'red']
+                LowRiskLabel=0
             else:
                 markers = ['*','.']
                 palette = ['red', 'yellowgreen']
+                LowRiskLabel=1
 
             ## Plotting     
             plt.figure(figsize=(18,9))
@@ -530,11 +562,18 @@ class Components:
                 PredIndXSub = self.PredIndX[self.PostHocSet['tumor_type'] == typeTumor]
                 PredIndYSub = self.PredIndY[self.PostHocSet['tumor_type'] == typeTumor]
                 IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
-
-
+                 
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
-                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSub[IndCentMembersSub==i]*1.2, marker=markers[i], 
-                                s =IndRefThetaSub[IndCentMembersSub==i]*200, color=paletteTumor[idx], edgecolors='black',linewidth=1.2)
+                    
+                    if i == LowRiskLabel:
+                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                    else:
+                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                        
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSubDicho, marker=markers[i], 
+                                s =120, color=paletteTumor[idx], edgecolors='black',linewidth=1.2)
 
                 AddLeg.append(mlines.Line2D([], [], color=paletteTumor[idx], marker='s', linestyle='None',  linewidth=1., markersize=12, markeredgewidth=1,markeredgecolor='black', label=typeTumor))
 
@@ -562,10 +601,20 @@ class Components:
 
 
             ## Risk-oriented representation across cancer
+            IndRefThetaSub = self.IndRefTheta
+            
             plt.subplot(122)
             for i in range(self.NCL_Ind): #IndCentEvenMembers
-                plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=self.IndRefTheta[self.IndCentMembers==i]*1.2, marker='*', 
-                            s =self.IndRefTheta[self.IndCentMembers==i]*200, color=palette[i], edgecolors='black',linewidth=0.5)
+                
+                if i == LowRiskLabel:
+                    IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                    IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                else:
+                    IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                    IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                    
+                plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=IndRefThetaSubDicho, marker='*', 
+                            s =120, color=palette[i], edgecolors='black',linewidth=0.5)
 
 
             for i in np.unique(self.ExFeatGLabel):
@@ -590,8 +639,10 @@ class Components:
 
             if self.IndCentMembers[self.ReferencePatIDLong] == 0:
                 palette = ['yellowgreen', 'red']
+                LowRiskLabel=0
             else:
                 palette = ['red', 'yellowgreen']
+                LowRiskLabel=1
 
 
             plt.figure(figsize=(14,14))
@@ -601,13 +652,21 @@ class Components:
                 PredIndXSub = self.PredIndX[self.PostHocSet['tumor_type'] == typeTumor]
                 PredIndYSub = self.PredIndY[self.PostHocSet['tumor_type'] == typeTumor]
                 IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
-
+                
                 plt.subplot(nrows,ncols,idx+1)
                 plt.subplots_adjust(hspace=0.15)
 
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
-                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSub[IndCentMembersSub==i]*1.1, marker='*', 
-                                s =IndRefThetaSub[IndCentMembersSub==i]*200, color=palette[i], edgecolors='black',linewidth=0.5)
+                    
+                    if i == LowRiskLabel:
+                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
+                    else:
+                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)                          
+                    
+                    plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSubDicho, marker='*', 
+                                s =90, color=palette[i], edgecolors='black',linewidth=0.5)
                 for i in np.unique(self.ExFeatGLabel):
                     plt.scatter(self.PredFeatX[self.ExFeatGLabel==i], self.PredFeatY[self.ExFeatGLabel==i],  alpha=0.8, marker='p',  s =80, color=ClPaletee[i], edgecolors='black',linewidth=1.2)
 
