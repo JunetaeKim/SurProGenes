@@ -395,12 +395,13 @@ class Components:
             for i in range(self.NCL_Ind): #IndCentEvenMembers
                 
                 if i == LowRiskLabel:
-                    IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                    IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub[self.IndCentMembers==i]),axis=0)
                     IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
                 else:
-                    IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                    IndRefThetaSub_ = np.argsort(IndRefThetaSub[self.IndCentMembers==i],axis=0)
                     IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
-                        
+                
+                IndRefThetaSubDicho = np.clip(IndRefThetaSubDicho, 0.25, 1.)        
                 plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=IndRefThetaSubDicho, marker='*', 
                             s =120, color=palette[i], edgecolors='black',linewidth=0.5)
 
@@ -439,13 +440,6 @@ class Components:
                 IndRefThetaSub = self.IndRefTheta[self.PostHocSet['tumor_type'] == typeTumor]
 
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
-                    
-                    if i == LowRiskLabel:
-                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
-                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
-                    else:
-                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
-                        IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
                     
                     plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  marker=markers[i], 
                                 s =120, color=palette[idx], edgecolors='black',linewidth=1.2)
@@ -497,12 +491,13 @@ class Components:
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
                     
                     if i == LowRiskLabel:
-                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub[IndCentMembersSub==i]),axis=0)
                         IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
                     else:
-                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                        IndRefThetaSub_ = np.argsort(IndRefThetaSub[IndCentMembersSub==i],axis=0)
                         IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
-                        
+                    
+                    IndRefThetaSubDicho = np.clip(IndRefThetaSubDicho, 0.25, 1.)
                     plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSubDicho, marker='*', 
                                 s =90, color=palette[i], edgecolors='black',linewidth=0.5)
                 plt.title(typeTumor, fontsize = 24)  
@@ -566,12 +561,13 @@ class Components:
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
                     
                     if i == LowRiskLabel:
-                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub[IndCentMembersSub==i]),axis=0)
                         IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
                     else:
-                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                        IndRefThetaSub_ = np.argsort(IndRefThetaSub[IndCentMembersSub==i],axis=0)
                         IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
                         
+                    IndRefThetaSubDicho = np.clip(IndRefThetaSubDicho, 0.25, 1.)    
                     plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSubDicho, marker=markers[i], 
                                 s =120, color=paletteTumor[idx], edgecolors='black',linewidth=1.2)
 
@@ -607,12 +603,13 @@ class Components:
             for i in range(self.NCL_Ind): #IndCentEvenMembers
                 
                 if i == LowRiskLabel:
-                    IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                    IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub[self.IndCentMembers==i]),axis=0)
                     IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
                 else:
-                    IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                    IndRefThetaSub_ = np.argsort(IndRefThetaSub[self.IndCentMembers==i],axis=0)
                     IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
-                    
+                
+                IndRefThetaSubDicho = np.clip(IndRefThetaSubDicho, 0.25, 1.)        
                 plt.scatter(self.PredIndX[self.IndCentMembers==i], self.PredIndY[self.IndCentMembers==i],  alpha=IndRefThetaSubDicho, marker='*', 
                             s =120, color=palette[i], edgecolors='black',linewidth=0.5)
 
@@ -659,12 +656,13 @@ class Components:
                 for i in range(self.NCL_Ind): #IndCentEvenMembers
                     
                     if i == LowRiskLabel:
-                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub),axis=0)
+                        IndRefThetaSub_ = np.argsort((1 -IndRefThetaSub[IndCentMembersSub==i]),axis=0)
                         IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)
                     else:
-                        IndRefThetaSub_ = np.argsort(IndRefThetaSub,axis=0)
+                        IndRefThetaSub_ = np.argsort(IndRefThetaSub[IndCentMembersSub==i],axis=0)
                         IndRefThetaSubDicho = (IndRefThetaSub_.argsort(axis=0)+1)/ (IndRefThetaSub_.shape[0]+1)                          
                     
+                    IndRefThetaSubDicho = np.clip(IndRefThetaSubDicho, 0.25, 1.)    
                     plt.scatter(PredIndXSub[IndCentMembersSub==i], PredIndYSub[IndCentMembersSub==i],  alpha=IndRefThetaSubDicho, marker='*', 
                                 s =90, color=palette[i], edgecolors='black',linewidth=0.5)
                 for i in np.unique(self.ExFeatGLabel):
