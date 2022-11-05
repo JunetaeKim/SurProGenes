@@ -1,0 +1,21 @@
+,Cohen's d,Tumor,Cluster,Gene,AdjP,RankbyES,,,,,,,,,IF,,
+0,0.392,BRCA,CL4,KCNJ5,3.91E-07,1,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4322558/,,,,,,,,7.69,,Burleigh2015
+1,0.355,BRCA,CL5,FCGR2C,6.15E-06,2,,,,,,,,,,,
+2,0.344,BRCA,CL1,RAB43,1.06E-05,3,,,,,,,,,,,
+3,0.34,BRCA,CL3,C19orf71,1.06E-05,4,,,,,,,,,,,
+4,0.327,BRCA,CL1,WHAMMP2,2.23E-05,5,,,,,,,,,,,
+5,1.142,COLO,CL5,LOC100132891,4.13E-27,1,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3795784/,,,,,,,,3.752,,Pagnotta2013
+6,1.136,COLO,CL2,ANGPT1,9.33E-27,2,,,,,,,,,,,
+7,1.135,COLO,CL5,PTPLAD2,6.38E-27,3,,,,,,,,,,,
+8,1.128,COLO,CL1,FHL5,6.38E-27,4,,,,,,,,,,,
+9,1.083,COLO,CL1,GAB3,1.58E-25,5,,,,,,,,,,,
+10,0.566,GLIOMA,CL2,C11orf63,4.11E-09,1,,,,,,,,,,,
+11,0.541,GLIOMA,CL5,MATL2963,6.99E-08,2,,,,,,,,,,,
+12,0.532,GLIOMA,CL1,EVC2,3.19E-08,3,,,,,,,,,,,
+13,0.485,GLIOMA,CL2,CABP4,2.96E-06,4,https://www.frontiersin.org/articles/10.3389/fonc.2021.650828/full,,,,,,,,5.36,,Deng2021
+14,0.484,GLIOMA,CL3,IL7,6.29E-06,5,,,,,,,,,,,
+15,0.508,KIPAN,CL3,KDELC1,2.19E-10,1,https://www.frontiersin.org/articles/10.3389/fbioe.2021.744659/full,,,,,,,,5.4,,Huang2022
+16,0.463,KIPAN,CL1,OSR1,1.47E-08,2,,,,,,,,,,,
+17,0.417,KIPAN,CL1,AGBL2,3.77E-07,3,,,,,,,,,,,
+18,0.413,KIPAN,CL2,C1orf186,7.78E-08,4,,,,,,,,,,,
+19,0.411,KIPAN,CL2,KCP,3.77E-07,5,,,,,,,,,,,
