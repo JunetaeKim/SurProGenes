@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
         MSavePoint = ModelCheckpoint(filepath='./ModelResults/M03_RCFR_S'+str(j)+  '_Epo'+'{epoch:02d}'+".hdf5", save_weights_only=True, monitor='loss', mode='min',  save_best_only=False)
 
-        CosModel.fit(x=(PatIDX[:],GeneIDX[:]) , y=GeneExp[:], verbose=1, epochs=20, batch_size=250000, shuffle=True, callbacks = [MSavePoint] )
+        CosModel.fit(x=(PatIDX[:],GeneIDX[:]) , y=GeneExp[:], verbose=1, epochs=25, batch_size=10000, shuffle=True, callbacks = [MSavePoint] )
 
         
         

@@ -72,7 +72,7 @@ if __name__ == "__main__":
     FeatN = len(np.unique(GeneIDX))
 
     
-    AdjCosWeight_ = 10
+    AdjCosWeight_ = 1
 
     # Loop for doing simulation j times; "Deep learning results are often not reproducible"
     # this is Demo version, so the model was trained independently 2 times with 20 epochs.
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
         MSavePoint = ModelCheckpoint(filepath='./ModelResults/M06_RCFR_AC_W'+str(AdjCosWeight_)+'_S'+str(j)+ '_Epo'+'{epoch:02d}'+ ".hdf5", save_weights_only=True, monitor='loss', mode='min',  save_best_only=False)
 
-        CosModel.fit(x=(PatIDX[:],GeneIDX[:]) , y=GeneExp[:], verbose=1, epochs=20, batch_size=250000, shuffle=True, callbacks = [MSavePoint] )
+        CosModel.fit(x=(PatIDX[:],GeneIDX[:]) , y=GeneExp[:], verbose=1, epochs=25, batch_size=10000, shuffle=True, callbacks = [MSavePoint] )
 
         
         
