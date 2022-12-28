@@ -5,7 +5,7 @@ import pickle
 import tensorflow as tf
 
 ## Specify data directory
-DataLOC = '../Data'
+DataLOC = '../1.Data'
 
 def Restratification(RestratDATA):
     
