@@ -9,6 +9,7 @@ from tensorflow.keras import backend as K
 
 
 from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import MinMaxScaler
 from lifelines import CoxPHFitter
 import statsmodels.api as sm
 from itertools import chain
@@ -184,9 +185,9 @@ def DoAggMetric (AggMetricList, MetricTable):
     MetricTable = MetricTable.reset_index(drop=True)    
 
     # Normalization of metrics
-    MinMetric =  MetricTable[AggMetricList].min()
-    MaxMetric =  MetricTable[AggMetricList].max()
-    NormMetric = ((MetricTable[AggMetricList] - MinMetric)/(MaxMetric-MinMetric)) 
+    scaler = MinMaxScaler()
+    scaler.fit(MetricTable[AggMetricList])
+    NormMetric = pd.DataFrame(scaler.transform(MetricTable[AggMetricList]), columns=[AggMetricList])
     NormMetric.columns = ['Norm'+i for i in AggMetricList]
     MetricTable = pd.concat([MetricTable, NormMetric.fillna(0)],axis=1)
 
