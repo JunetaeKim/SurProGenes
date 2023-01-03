@@ -20,7 +20,7 @@ os.environ['TF_DETERMINISTIC_OPS'] = 'True'
 
 ## GPU selection
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 # TensorFlow wizardry
 config = tf.compat.v1.ConfigProto()
@@ -40,11 +40,11 @@ if __name__ == "__main__":
     ## Data load
 
     # Data for the deep learning model
-    StackedData = np.load('../Data/ProcessedData/StakedgData_GroupNorm.npy', allow_pickle=True)
-    IntToGene = np.load('../Data/ProcessedData/IntToGene_GroupNorm.npy', allow_pickle=True).tolist()
-    DistMat = np.load('../Data/ProcessedData/DisimInd_GroupNorm.npy', allow_pickle=True)
-    TTE = np.load('../Data/ProcessedData/TTE_GroupNorm.npy', allow_pickle=True)
-    EVENT = np.load('../Data/ProcessedData/Event_GroupNorm.npy', allow_pickle=True)
+    StackedData = np.load('../1.Data/ProcessedData/StakedgData_GroupNorm.npy', allow_pickle=True)
+    IntToGene = np.load('../1.Data/ProcessedData/IntToGene_GroupNorm.npy', allow_pickle=True).tolist()
+    DistMat = np.load('../1.Data/ProcessedData/DisimInd_GroupNorm.npy', allow_pickle=True)
+    TTE = np.load('../1.Data/ProcessedData/TTE_GroupNorm.npy', allow_pickle=True)
+    EVENT = np.load('../1.Data/ProcessedData/Event_GroupNorm.npy', allow_pickle=True)
 
     # Masking vectors used for learning risk ordered embedding vectors
     NegativeMask = ((TTE[:,None] - TTE[None])<0).astype('int')

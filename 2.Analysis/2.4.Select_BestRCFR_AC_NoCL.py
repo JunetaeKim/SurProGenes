@@ -1,7 +1,7 @@
 # Parameters for post-hoc models; you must set those parameters for this task
 ModelID = 'M04' # Model ID
 WeightID = 'W1' # Weight ID for ACAM
-NumGene_CL = 900 # The max number of genes to select for evaluation, denoted as Kn in the manuscript.
+NumGene_CL = 100 # The max number of genes to select for evaluation, denoted as Kn in the manuscript.
 pCutoff = 0.005 # COX hazard model significance criteria to select learning results during priority-based model selection.
 ExcRate = 0.2 # Percentage of results to be excluded during priority-based model selection.
 NmodEahG = 1 # The number of best models to select for each independent learning during priority-based model selection.
@@ -30,7 +30,7 @@ from Module.DataProcessing import DataLoad
 from Module.MetricsGroupNOCL import DoMetric, DoAggMetric, DoSimEval
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 

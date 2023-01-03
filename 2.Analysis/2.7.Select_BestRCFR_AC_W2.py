@@ -30,7 +30,7 @@ from Module.DataProcessing import DataLoad
 from Module.MetricsGroup import DoMetric, DoAggMetric, DoSimEval
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
