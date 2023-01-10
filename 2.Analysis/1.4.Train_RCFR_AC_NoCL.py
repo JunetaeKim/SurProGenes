@@ -70,7 +70,7 @@ if __name__ == "__main__":
     FeatN = len(np.unique(GeneIDX))
 
     
-    AdjCosWeight_ = 1
+    AdjCosWeight_ = 3
 
     # Loop for doing simulation j times; "Deep learning results are often not reproducible"
     for j in range(1, 6):
