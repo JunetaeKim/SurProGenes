@@ -179,52 +179,43 @@ def DoMetric (DataMetric, LayerList):
 
 
 
-def DoAggMetric (AggMetricList, MetricTable):
-    
+def DoSimEval (MetricTable, MetricList, NmodEachG):
 
-    MetricTable = MetricTable.reset_index(drop=True)    
-
-    # Normalization of metrics
-    scaler = MinMaxScaler()
-    scaler.fit(MetricTable[AggMetricList])
-    NormMetric = pd.DataFrame(scaler.transform(MetricTable[AggMetricList]), columns=[AggMetricList])
-    NormMetric.columns = ['Norm'+i for i in AggMetricList]
-    MetricTable = pd.concat([MetricTable, NormMetric.fillna(0)],axis=1)
-
-    # Calculating the aggregated metric to select the best model. 
-    # AvgtPRate is not used to calculate the metric since it is proportional to tAdjP
-    MetricTable['Metrics'] = np.sum(MetricTable[[i for i in MetricTable.columns if 'Norm' in i]], axis=1)
-    
-    return MetricTable
-
-
-def DoSimEval (MetricTable, pFilter, pCutoff, MetricList, ExcRate, NmodEachG):
-    
     ListGroupM = np.unique(MetricTable['GroupM'])
     AggMetricTable = pd.DataFrame()
+
+    # List for normalization 
+    IdxList = ['Model', 'GroupM', 'EpNum']
+    NormMetricList = MetricList.copy()
+    NormMetricList.remove('MaxSurvpVal')
+    NormMetricList.append('OppMaxSurvpVal')
+
     
     for GM in ListGroupM:
-        print(GM)
 
-        # 0. Model group selection
+        # 1. Model group selection
         SelGroup = MetricTable[MetricTable['GroupM'] == GM].copy()
-        
-        # 1. pFilter based filter out
-        SelMetric = SelGroup[SelGroup[pFilter] < pCutoff].copy()
-        
-        if len(SelMetric) < NmodEachG:
-            SelMetric = SelGroup.copy()
-        
-        # 2. MetricList based filter out
-        for metric in MetricList:
-            SelMetric = SelMetric.sort_values(metric)[int(SelMetric.shape[0] * ExcRate):].copy()
-            print('N obs with filter of ' +str(metric)+ ' :' , SelMetric.shape[0])
+        SelGroup = SelGroup.reset_index(drop=True)
 
+        # 2. p-values need to be inversely transformed to match the other metrics.
+        ToNormSelGroup = SelGroup[MetricList].copy()
+        ToNormSelGroup['OppMaxSurvpVal'] = 1 - ToNormSelGroup['MaxSurvpVal']
+        ToNormSelGroup = ToNormSelGroup.drop(columns='MaxSurvpVal').copy()
+
+        # 3. Normaliztion
+        scaler = MinMaxScaler()
+        scaler.fit(ToNormSelGroup)
+        NormRes = scaler.transform(ToNormSelGroup)
+
+        # 4. Aggregate normalized values
+        SubAgg = SelGroup[IdxList +MetricList].copy()
+        SubAgg['Metrics'] = np.mean(NormRes, axis=1)
+
+        # 5. Sort
+        SubAgg =SubAgg.sort_values('Metrics', ascending=False)
+
+        # 6. Append
+        AggMetricTable = AggMetricTable.append(SubAgg[:NmodEachG])
+        AggMetricTable = AggMetricTable.sort_values('Metrics', ascending=False).reset_index(drop=True)
         
-        ## Aggregated Metrics
-        SelMetric = DoAggMetric(MetricList, SelMetric).sort_values('Metrics')[-NmodEachG:]
-        
-        AggMetricTable = AggMetricTable.append(SelMetric)
-        print()
-        
-    return AggMetricTable.reset_index(drop=True)
+    return AggMetricTable

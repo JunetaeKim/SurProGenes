@@ -1,7 +1,4 @@
 # Parameters for post-hoc models; you must set those parameters for this task
-ModelID = 'M05' # Model ID
-WeightID = 'W1' # Weight ID for ACAM
-NumGene_CL = 100 # The max number of genes to select for evaluation, denoted as Kn in the manuscript.
 pCutoff = 0.005 # COX hazard model significance criteria to select learning results during priority-based model selection.
 ExcRate = 0.2 # Percentage of results to be excluded during priority-based model selection.
 NmodEahG = 1 # The number of best models to select for each independent learning during priority-based model selection.
@@ -19,6 +16,7 @@ import sys
 import pandas as pd
 import numpy as np
 import re
+from argparse import ArgumentParser
 
 import tensorflow as tf
 from tensorflow.keras import backend as K
@@ -27,21 +25,10 @@ from tensorflow.keras.models import Model ,load_model
 from lifelines import CoxPHFitter
 from Models.RCFR_AC_NoSIM import SetModel
 from Module.DataProcessing import DataLoad
-from Module.MetricsGroup import DoMetric, DoAggMetric, DoSimEval
+from Module.MetricsGroup import DoMetric, DoSimEval
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
-
-
-
-## function for priority-based model selection
-def Aggregation(MetricTable,AggMetricList):
-    AggMetricTable = DoSimEval(MetricTable, 'MaxSurvpVal',pCutoff, AggMetricList, ExcRate, NmodEahG)
-    AggMetricRank = DoAggMetric(AggMetricList, AggMetricTable[['Model']+AggMetricList]).sort_values('Metrics')
-    AggMetricRank = pd.merge(AggMetricRank, AggMetricTable[['Model','MaxSurvpVal']], on='Model', how='left')
-    BestModel = AggMetricRank.sort_values('Metrics').iloc[-1]
-    
-    return AggMetricRank, BestModel
 
 
 # Model Preset; the parameter values must be the same as in the model training step.
@@ -53,6 +40,18 @@ AdjCosWeight_ = 1. # This parameter affects only training phases, so thus any fl
 
 
 if __name__ == "__main__":
+    
+    # Parsing arguments
+    parser = ArgumentParser()
+    parser.add_argument('-m', '--ModelID', type=str, required=False, default='M05', help='Pretrained model ID, e.g., M05, M06, ...')
+    parser.add_argument('-w', '--WeightID', type=str, required=True, help='Weight ID for ACAM, e.g., W1, W2, ...')
+    parser.add_argument('-n', '--NumGene_CL', type=int, required=True, help='The max number of genes to select for evaluation, denoted as Kn in the manuscript, e.g., 100, 300, ...')
+    args = parser.parse_args()
+    ModelID = args.ModelID
+    WeightID = args.WeightID
+    NumGene_CL = args.NumGene_CL
+
+    print('\n\n        ==========  Model ID : ', ModelID, ',  WeightID :', WeightID, ',  NumGene_CL :', NumGene_CL, '  ==========\n\n')
     
     ## Data load
     StackedData, IntToGene, TTE, EVENT, TrIndEmbeddMask, ReferencePatIDLong, ReferencePatIDShort, NormDismInd, MergedData= DataLoad()
@@ -67,7 +66,7 @@ if __name__ == "__main__":
     
     # Task set-up
     ModelList = os.listdir(FilePath)
-    ModelList = [i for i in ModelList if ModelID in i ]
+    ModelList = [i for i in ModelList if ModelID in i]
 
 
     # Model structure load
@@ -104,19 +103,13 @@ if __name__ == "__main__":
     # Saving the metric table
     MetricTable.to_csv(SavePath+ModelName+'_MetricTable_'+str(WeightID)+'_Filt'+str(NumGene_CL)+'.csv',index=False)
     
-       
-    ## Procedure for priority-based model selection by metrics
-    NegMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef',  'MinNegSigRate', 'AvgNegSigRate', 'MinABSGeCohD', 'AvgABSGeCohD']
-    PosMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef', 'MinPosSigRate', 'AvgPosSigRate', 'MinABSGeCohD', 'AvgABSGeCohD']
 
-    NegAggMetricRank, NegBestModel =  Aggregation(MetricTable, NegMetricList)
-    PosAggMetricRank, PosBestModel =  Aggregation(MetricTable, PosMetricList)
+    ## Procedure for model selection by metrics
+    NegMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef',  'MinNegSigRate', 'AvgNegSigRate', 'MinABSGeCohD', 'AvgABSGeCohD', 'MaxSurvpVal']
+    PosMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef', 'MinPosSigRate', 'AvgPosSigRate', 'MinABSGeCohD', 'AvgABSGeCohD', 'MaxSurvpVal']
+
+    NegAggMetricRank = DoSimEval(MetricTable, NegMetricList, NmodEachG)
+    PosAggMetricRank = DoSimEval(MetricTable, PosMetricList, NmodEachG)
 
     NegAggMetricRank.to_csv(SavePath+ModelName+'_Neg_AggMetricRank_'+str(WeightID)+'_Filt'+str(NumGene_CL)+'.csv',index=False)
     PosAggMetricRank.to_csv(SavePath+ModelName+'_Pos_AggMetricRank_'+str(WeightID)+'_Filt'+str(NumGene_CL)+'.csv',index=False)
-
-
-
-    
-
-    
