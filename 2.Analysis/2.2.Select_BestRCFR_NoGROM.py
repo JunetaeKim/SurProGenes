@@ -20,27 +20,16 @@ from argparse import ArgumentParser
 
 import tensorflow as tf
 from tensorflow.keras import backend as K
-from tensorflow.keras.models import Model ,load_model
+from tensorflow.keras.models import Model, load_model
 
 from lifelines import CoxPHFitter
 from Models.RCFR_NoGROM import SetModel
 from Module.DataProcessing import DataLoad
-from Module.MetricsGroup import DoMetric, DoAggMetric, DoSimEval
+from Module.MetricsGroup import DoMetric, DoSimEval
 
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
-
-
-
-## function for priority-based model selection
-def Aggregation(MetricTable,AggMetricList):
-    AggMetricTable = DoSimEval(MetricTable, 'MaxSurvpVal',pCutoff, AggMetricList, ExcRate, NmodEahG)
-    AggMetricRank = DoAggMetric(AggMetricList, AggMetricTable[['Model']+AggMetricList]).sort_values('Metrics')
-    AggMetricRank = pd.merge(AggMetricRank, AggMetricTable[['Model','MaxSurvpVal']], on='Model', how='left')
-    BestModel = AggMetricRank.sort_values('Metrics').iloc[-1]
-    
-    return AggMetricRank, BestModel
 
 
 # Model Preset; the parameter values must be the same as in the model training step.
@@ -74,7 +63,7 @@ if __name__ == "__main__":
     
     # Task set-up
     ModelList = os.listdir(FilePath)
-    ModelList = [i for i in ModelList if ModelID in i ]
+    ModelList = [i for i in ModelList if ModelID in i]
 
 
     # Model structure load
@@ -112,18 +101,12 @@ if __name__ == "__main__":
     MetricTable.to_csv(SavePath+ModelName+'_MetricTable_Filt'+str(NumGene_CL)+'.csv',index=False)
 
        
-    ## Procedure for priority-based model selection by metrics
-    NegMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef',  'MinNegSigRate', 'AvgNegSigRate', 'MinABSGeCohD', 'AvgABSGeCohD']
-    PosMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef', 'MinPosSigRate', 'AvgPosSigRate', 'MinABSGeCohD', 'AvgABSGeCohD']
+    ## Procedure for model selection by metrics
+    NegMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef',  'MinNegSigRate', 'AvgNegSigRate', 'MinABSGeCohD', 'AvgABSGeCohD', 'MaxSurvpVal']
+    PosMetricList = ['IndCentRatio', 'MinABSSurvCoef', 'AvgABSSurvCoef', 'MinPosSigRate', 'AvgPosSigRate', 'MinABSGeCohD', 'AvgABSGeCohD', 'MaxSurvpVal']
 
-    NegAggMetricRank, NegBestModel =  Aggregation(MetricTable, NegMetricList)
-    PosAggMetricRank, PosBestModel =  Aggregation(MetricTable, PosMetricList)
+    NegAggMetricRank = DoSimEval(MetricTable, NegMetricList, NmodEachG)
+    PosAggMetricRank = DoSimEval(MetricTable, PosMetricList, NmodEachG)
 
     NegAggMetricRank.to_csv(SavePath+ModelName+'_Neg_AggMetricRank_Filt'+str(NumGene_CL)+'.csv',index=False)
     PosAggMetricRank.to_csv(SavePath+ModelName+'_Pos_AggMetricRank_Filt'+str(NumGene_CL)+'.csv',index=False)
-
-
-
-    
-
-    
