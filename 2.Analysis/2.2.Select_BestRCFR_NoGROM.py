@@ -1,7 +1,7 @@
 # Parameters for post-hoc models; you must set those parameters for this task
 pCutoff = 0.005 # COX hazard model significance criteria to select learning results during priority-based model selection.
 ExcRate = 0.2 # Percentage of results to be excluded during priority-based model selection.
-NmodEahG = 1 # The number of best models to select for each independent learning during priority-based model selection.
+NmodEachG = 1 # The number of best models to select for each independent learning during priority-based model selection.
 
 
 # Path setting
