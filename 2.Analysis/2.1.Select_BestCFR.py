@@ -1,6 +1,7 @@
 # Parameters for post-hoc models; you must set those parameters for this task
+# ModelID = 'M01' # Model ID
+# NumGene_CL = 500 # The max number of genes to select for evaluation, denoted as Kn in the manuscript.
 pCutoff = 0.005 # COX hazard model significance criteria to select learning results during priority-based model selection.
-ExcRate = 0.2 # Percentage of results to be excluded during priority-based model selection.
 NmodEachG = 1 # The number of best models to select for each independent learning during priority-based model selection.
 
 
@@ -20,7 +21,7 @@ from argparse import ArgumentParser
 
 import tensorflow as tf
 from tensorflow.keras import backend as K
-from tensorflow.keras.models import Model, load_model
+from tensorflow.keras.models import Model ,load_model
 
 from lifelines import CoxPHFitter
 from Models.CFR import SetModel
@@ -29,7 +30,7 @@ from Module.MetricsGroup import DoMetric, DoSimEval
 
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 
 # Model Preset; the parameter values must be the same as in the model training step.
@@ -40,7 +41,7 @@ NCL_Ind = 2
 
 
 if __name__ == "__main__":
-
+    
     # Parsing arguments
     parser = ArgumentParser()
     parser.add_argument('-m', '--ModelID', type=str, required=False, default='M01', help='Pretrained model ID, e.g., M01, M02, ...')
@@ -50,7 +51,7 @@ if __name__ == "__main__":
     NumGene_CL = args.NumGene_CL
 
     print('\n\n        ==========  Model ID : ', ModelID, ',  No Weight,  NumGene_CL :', NumGene_CL, '  ==========\n\n')
-    
+
     ## Data load
     StackedData, IntToGene, TTE, EVENT, TrIndEmbeddMask, ReferencePatIDLong, ReferencePatIDShort, NormDismInd, MergedData= DataLoad()
 
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     
     # Task set-up
     ModelList = os.listdir(FilePath)
-    ModelList = [i for i in ModelList if ModelID in i]
+    ModelList = [i for i in ModelList if ModelID in i ]
 
     
     # Model structure load
@@ -93,7 +94,6 @@ if __name__ == "__main__":
         print('NegSigRate :',InfoFeatGroup[0],' , PosSigRate :',InfoFeatGroup[1],' , SurvpVal :',InfoFeatGroup[2])
         MetricTable = pd.concat([MetricTable, pd.DataFrame([[model] + metrics], columns=ColList)], axis=0)
 
-    #MetricTable = DoAggMetric(AggMetricList, MetricTable)
     MetricTable['GroupM'] = np.array([re.findall('.\d+', i)[1][1:] for i in  MetricTable['Model']])
     MetricTable['EpNum'] = np.array([ re.findall('.\d+\.', i)[0][1:-1] for i in  MetricTable['Model']]).astype('int')
     MetricTable = MetricTable.sort_values(['GroupM','EpNum'])
@@ -111,3 +111,9 @@ if __name__ == "__main__":
 
     NegAggMetricRank.to_csv(SavePath+ModelName+'_Neg_AggMetricRank_Filt'+str(NumGene_CL)+'.csv',index=False)
     PosAggMetricRank.to_csv(SavePath+ModelName+'_Pos_AggMetricRank_Filt'+str(NumGene_CL)+'.csv',index=False)
+
+
+
+    
+
+    

@@ -1,6 +1,8 @@
 # Parameters for post-hoc models; you must set those parameters for this task
+# ModelID = 'M06' # Model ID
+# WeightID = 'W1' # Weight ID for ACAM
+# NumGene_CL = 100 # The max number of genes to select for evaluation, denoted as Kn in the manuscript.
 pCutoff = 0.005 # COX hazard model significance criteria to select learning results during priority-based model selection.
-ExcRate = 0.2 # Percentage of results to be excluded during priority-based model selection.
 NmodEachG = 1 # The number of best models to select for each independent learning during priority-based model selection.
 
 
@@ -28,7 +30,7 @@ from Module.DataProcessing import DataLoad
 from Module.MetricsGroup import DoMetric, DoSimEval
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 
 # Model Preset; the parameter values must be the same as in the model training step.
@@ -66,7 +68,7 @@ if __name__ == "__main__":
 
     # Task set-up
     ModelList = os.listdir(FilePath)
-    ModelList = [i for i in ModelList if ModelID in i]
+    ModelList = [i for i in ModelList if ModelID in i ]
 
 
     # Model structure load
@@ -115,3 +117,10 @@ if __name__ == "__main__":
 
     NegAggMetricRank.to_csv(SavePath+ModelName+'_Neg_AggMetricRank_'+str(WeightID)+'_Filt'+str(NumGene_CL)+'.csv',index=False)
     PosAggMetricRank.to_csv(SavePath+ModelName+'_Pos_AggMetricRank_'+str(WeightID)+'_Filt'+str(NumGene_CL)+'.csv',index=False)
+
+
+
+
+    
+
+    
