@@ -66,5 +66,33 @@
   - `Event_GroupNorm.npy`
   - `LogAnalData.pickle`
   
+
+## Prerequisites
+
+  The code is implemented with the following dependencies:
+
+  * python (v3.6)
+  * numpy (v1.19)
+  * tensorflow (v2.4)
+  * tensorflow-gpu (v2.4)
+  * jupyter
+  * lifelines
+  * matplotlib
+  * pandas
+  * scikit-learn
+  * seaborn
+  * statsmodels
+  * venn
+
+
+## Replicating the experiments of the paper
+
+  1. Clone the repository.
+  
+  ```
+  git clone https://github.com/JuntaeKim/SurProGenes.git
+  ```
+  
+  2. Create a conda environment with all necessary libraries in **Prerequisites**.
   
 (작성중)
