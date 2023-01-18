@@ -13,7 +13,7 @@
 
 ### Similarity-based Embedding Mechanism (SEM)
   <p align="center">
-  <img src="./2.Analysis/Models/Model_figures/fig_sem_mechanism.png" width="600"/>
+  <img src="./2.Analysis/Models/Model_figures/fig_sem_mechanism.png" width="500"/>
   </p>
 
   $$loss_{GX}=\frac{1}{PG}\sum_{p=1}^{P}{\sum_{g=1}^{G}{(GX_{p,g}-\widehat{WGX}_{p,g})^2}}\qquad (eq. 4)$$
@@ -22,21 +22,21 @@
 
 1. Patient-oriented ROM (PROM)
   <p align="center">
-  <img src="./2.Analysis/Models/Model_figures/fig_prom.png" width="600"/>
+  <img src="./2.Analysis/Models/Model_figures/fig_prom.png" width="500"/>
   </p>
 
   $$Rloss_{pat}=\frac{1}{P^2}\sum_{i=1}^{P}{\sum_{j=1}^{P}{PRM_{i,j}(DTL_{i,j}-PED_{i,j})^2}}\qquad (eq. 6)$$
 
 2. Gene-oriented ROM (GROM)
   <p align="center">
-  <img src="./2.Analysis/Models/Model_figures/fig_grom.png" width="600"/>
+  <img src="./2.Analysis/Models/Model_figures/fig_grom.png" width="500"/>
   </p>
 
   $$Rloss_{gene}=\frac{1}{G^2}\sum_{i=1}^{G}{\sum_{j=1}^{G}{(GLDeud_{i,j}-GED_{i,j})^2}}\qquad (eq. 7)$$
 
 3. ACAM : ArcCosine angle Adjustment Mechanism
   <p align="center">
-  <img src="./2.Analysis/Models/Model_figures/fig_acam.png" width="600"/>
+  <img src="./2.Analysis/Models/Model_figures/fig_acam.png" width="500"/>
   </p>
 
   $$\overline{Rloss}_{gene}=\frac{1}{G^2}\sum_{i=1}^{G}{\sum_{j=1}^{G}{(\overline{GLD}eud_{i,j}-GED_{i,j})^2}}\qquad (eq. 11)$$
