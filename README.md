@@ -145,4 +145,4 @@
   
   9. Run [`2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb`](./2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb) in Jupyter notebook.
 
-  10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb) in Jupyter notebook.
+  10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb) in Jupyter notebook.
