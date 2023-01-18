@@ -105,7 +105,7 @@
   python 1.8.Train_RCFR_AC_W3.py
   ```
   
-  6. For a simple experiment, run the model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
+  6. Run the model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
   
   ```
   python 2.1.Select_BestCFR.py -n 100
