@@ -1,6 +1,6 @@
 # SurProGenes
 
-  This repository contains the Python code to replicate experiments in
+  This repository contains the Python code to implement the experiments in
   _**SurProGenes: Survival Risk-Ordered Representation of Cancer Patients and Genes for the Identification of Prognostic Genes**_.
   This paper presents a framework that recommends individual prognostic genes by integrating representation learning and statistical analysis.
 
