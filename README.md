@@ -83,7 +83,7 @@
   * venn
 
 
-## Replicating the experiments of the paper
+## Replicating the main experiment
 
   1. Clone the repository.
   
@@ -124,5 +124,33 @@
   ```
   
   7. Run [`2.Analysis/3.1.Performance_Comparison.ipynb`](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can obtain [`Performance Table`](./2.Analysis/EvalResults/PerformanceTable.csv).
+
+
+### Additional experiments
+
+  8. For performance comparison by the number of candidate genes from each cluster, run model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
+
+  ```
+  python 2.1.Select_BestCFR.py -n 300
+  python 2.1.Select_BestCFR.py -n 500
+  python 2.1.Select_BestCFR.py -n 700
+  python 2.1.Select_BestCFR.py -n 900
+  python 2.2.Select_BestRCFR_NoGROM.py -n 300
+  python 2.2.Select_BestRCFR_NoGROM.py -n 500
+  python 2.2.Select_BestRCFR_NoGROM.py -n 700
+  python 2.2.Select_BestRCFR_NoGROM.py -n 900
+  python 2.3.Select_BestRCFR.py -n 300
+  python 2.3.Select_BestRCFR.py -n 500
+  .
+  .
+  .
+  python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 700
+  python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 900
+  ```
+  
+  9. Run [`2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb`](./2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb) in Jupyter notebook.
+
+  10. For additional statistical analisys with the main model, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb) in Jupyter notebook.
+
   
 (작성중)
