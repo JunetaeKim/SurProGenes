@@ -124,7 +124,7 @@
   python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 100
   ```
   
-  7. Run [`2.Analysis/3.1.Performance_Comparison.ipynb`](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can obtain [`Performance Table`](./2.Analysis/EvalResults/PerformanceTable.csv).
+  7. Run [`2.Analysis/3.1.Performance_Comparison.ipynb`](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can get evaluation results including [`Performance Table`](./2.Analysis/EvalResults/PerformanceTable.csv).
 
 
 #### Additional experiments
