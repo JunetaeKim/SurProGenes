@@ -97,7 +97,7 @@
   
   4. Run [`1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb`](./1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb) in Jupyter notebook.
   
-  5. Open terminal and activate your conda environment. Then, run the training files in ['2.Analysis/'](./2.Analysis/) as follows:
+  5. Open terminal and activate your conda environment. Then, run the training files in [`2.Analysis/`](./2.Analysis/) as follows:
   
   ```
   python 1.1.Train_CFR.py
@@ -110,7 +110,7 @@
   python 1.8.Train_RCFR_AC_W3.py
   ```
   
-  6. For a simple experiment, run the model selection files in ['2.Analysis/'](./2.Analysis/) as follows:
+  6. For a simple experiment, run the model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
   
   ```
   python 2.1.Select_BestCFR.py -n 100
@@ -123,6 +123,6 @@
   python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 100
   ```
   
-  7. Run ['2.Analysis/3.1.Performance_Comparison.ipynb'](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can obtain ['PerformanceTable'](./2.Analysis/EvalResults/PerformanceTable.csv).
+  7. Run [`2.Analysis/3.1.Performance_Comparison.ipynb`](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can obtain [`Performance Table`](./2.Analysis/EvalResults/PerformanceTable.csv).
   
 (작성중)
