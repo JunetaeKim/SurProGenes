@@ -31,6 +31,8 @@
   <p align="center">
   <img src="./2.Analysis/Models/Model_figures/fig_grom.png" alt width="500"/>
   <em>GROM</em>
+  </p>
+  <p align="center">
   <img src="./2.Analysis/Models/Model_figures/fig_acam.png" width="400"/>
   <em>ACAM</em>
   </p>
