@@ -56,7 +56,7 @@
 
   The code is implemented with the following dependencies:
 
-  * python (v3.6)
+  * python (v3.8)
   * numpy (v1.19)
   * tensorflow (v2.4)
   * tensorflow-gpu (v2.4)
