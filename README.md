@@ -34,7 +34,7 @@
 
   $$Rloss_{gene}=\frac{1}{G^2}\sum_{i=1}^{G}{\sum_{j=1}^{G}{(GLDeud_{i,j}-GED_{i,j})^2}}\qquad (eq. 7)$$
 
-3. ACAM : ArcCosine angle Adjustment Mechanism
+2-1. ArcCosine angle Adjustment Mechanism (ACAM)
   <p align="center">
   <img src="./2.Analysis/Models/Model_figures/fig_acam.png" width="500"/>
   </p>
