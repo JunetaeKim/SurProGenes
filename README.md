@@ -79,7 +79,9 @@
   ```
   
   2. Create a conda environment with all necessary libraries in **Prerequisites**.
-  
+
+#### Data processing
+
   3. Run [`1.Data/1.DataProcessing_Raw.ipynb`](./1.Data/1.DataProcessing_Raw.ipynb) in Jupyter notebook.
   
   4. Run [`1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb`](./1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb) in Jupyter notebook. Then, you can get the following data in [`1.Data/ProcessedData/`](./1.Data/ProcessedData/) folder.
@@ -91,6 +93,8 @@
   - `TTE_GroupNorm.npy`
   - `Event_GroupNorm.npy`
   - `LogAnalData.pickle`
+  
+#### Model training
   
   5. Open terminal and activate your conda environment. Then, run the training files in [`2.Analysis/`](./2.Analysis/) as follows:
   
@@ -104,6 +108,8 @@
   python 1.7.Train_RCFR_AC_W2.py
   python 1.8.Train_RCFR_AC_W3.py
   ```
+  
+#### Evaluation
   
   6. Run the model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
   
@@ -121,7 +127,7 @@
   7. Run [`2.Analysis/3.1.Performance_Comparison.ipynb`](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can obtain [`Performance Table`](./2.Analysis/EvalResults/PerformanceTable.csv).
 
 
-### Additional experiments
+#### Additional experiments
 
   8. For *performance comparison* by the number of candidate genes from each cluster, run model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
 
