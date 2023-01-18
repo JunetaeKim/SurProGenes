@@ -53,9 +53,7 @@
 
 
 ## Data processing
-  To obtain input data, execute [`1.DataProcessing_Raw.ipynb`](./1.Data/1.DataProcessing_Raw.ipynb) and
-  [`2.DataProcessing_CoreProgenex_GroupNorm.ipynb`](./1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb) in
-  [`1.Data/`](./1.Data/) folder.
+  To obtain input data, execute Jupyter notebook files in [`1.Data/`](./1.Data/) folder.
   Then, you can get the following data in [`1.Data/ProcessedData/`](./1.Data/ProcessedData/) folder.
   
   - `StakedgData_GroupNorm.npy`
@@ -94,5 +92,37 @@
   ```
   
   2. Create a conda environment with all necessary libraries in **Prerequisites**.
+  
+  3. Run [`1.Data/1.DataProcessing_Raw.ipynb`](./1.Data/1.DataProcessing_Raw.ipynb) in Jupyter notebook.
+  
+  4. Run [`1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb`](./1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb) in Jupyter notebook.
+  
+  5. Open terminal and activate your conda environment. Then, run the training files in ['2.Analysis/'](./2.Analysis/) as follows:
+  
+  ```
+  python 1.1.Train_CFR.py
+  python 1.2.Train_RCFR_NoGROM.py
+  python 1.3.Train_RCFR.py
+  python 1.4.Train_RCFR_AC_NoCL.py
+  python 1.5.Train_RCFR_AC_NoSim.py
+  python 1.6.Train_RCFR_AC_W1.py
+  python 1.7.Train_RCFR_AC_W2.py
+  python 1.8.Train_RCFR_AC_W3.py
+  ```
+  
+  6. For a simple experiment, run the model selection files in ['2.Analysis/'](./2.Analysis/) as follows:
+  
+  ```
+  python 2.1.Select_BestCFR.py -n 100
+  python 2.2.Select_BestRCFR_NoGROM.py -n 100
+  python 2.3.Select_BestRCFR.py -n 100
+  python 2.4.Select_BestRCFR_AC_NoCL.py -w W3 -n 100
+  python 2.5.Select_BestRCFR_AC_Nosim.py -w W3 -n 100
+  python 2.6.Select_BestRCFR_AC.py -m M06 -w W1 -n 100
+  python 2.6.Select_BestRCFR_AC.py -m M07 -w W2 -n 100
+  python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 100
+  ```
+  
+  7. Run ['2.Analysis/3.1.Performance_Comparison.ipynb'](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can obtain ['PerformanceTable'](./2.Analysis/EvalResults/PerformanceTable.csv).
   
 (작성중)
