@@ -70,7 +70,7 @@
   * venn
 
 
-## Experiment implementation
+## Implementation the experiments
 
   1. Clone the repository.
   
