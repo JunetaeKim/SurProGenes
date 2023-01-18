@@ -160,6 +160,6 @@
   python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 900
   ```
   
-  9. Run [`2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb`](./2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb) in Jupyter notebook.
+  9. Run [`2.Analysis/3.1.Performance_Comparison_by_Candidate_Size.ipynb`](./2.Analysis/3.1.Performance_Comparison_by_Candidate_Size.ipynb) in Jupyter notebook.
 
   10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb) in Jupyter notebook.
