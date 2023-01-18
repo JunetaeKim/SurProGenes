@@ -50,20 +50,7 @@
   $$SPloss_{gene}=\frac{1}{C^G}\sum_{i=1}^{C^G}{\max{(\xi_{3}-(D_{\theta}^{s}(GCM))_{i},0)}}$$
   
   $$SPloss_{pat}=\frac{1}{C^P}\sum_{i=1}^{C^P}{\max{(\xi_{3}-(D_{\theta}^{s}(PCM))_{i},0)}}$$
-
-
-## Data processing
-  To obtain input data, execute Jupyter notebook files in [`1.Data/`](./1.Data/) folder.
-  Then, you can get the following data in [`1.Data/ProcessedData/`](./1.Data/ProcessedData/) folder.
-  
-  - `StakedgData_GroupNorm.npy`
-  - `GeneToInt_GroupNorm.npy`
-  - `IntToGene_GroupNorm.npy`
-  - `DisimInd_GroupNorm.npy`
-  - `TTE_GroupNorm.npy`
-  - `Event_GroupNorm.npy`
-  - `LogAnalData.pickle`
-  
+ 
 
 ## Prerequisites
 
@@ -95,7 +82,15 @@
   
   3. Run [`1.Data/1.DataProcessing_Raw.ipynb`](./1.Data/1.DataProcessing_Raw.ipynb) in Jupyter notebook.
   
-  4. Run [`1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb`](./1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb) in Jupyter notebook.
+  4. Run [`1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb`](./1.Data/2.DataProcessing_CoreProgenex_GroupNorm.ipynb) in Jupyter notebook. Then, you can get the following data in [`1.Data/ProcessedData/`](./1.Data/ProcessedData/) folder.
+  
+  - `StakedgData_GroupNorm.npy`
+  - `GeneToInt_GroupNorm.npy`
+  - `IntToGene_GroupNorm.npy`
+  - `DisimInd_GroupNorm.npy`
+  - `TTE_GroupNorm.npy`
+  - `Event_GroupNorm.npy`
+  - `LogAnalData.pickle`
   
   5. Open terminal and activate your conda environment. Then, run the training files in [`2.Analysis/`](./2.Analysis/) as follows:
   
@@ -128,7 +123,7 @@
 
 ### Additional experiments
 
-  8. For performance comparison by the number of candidate genes from each cluster, run model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
+  8. For *performance comparison* by the number of candidate genes from each cluster, run model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
 
   ```
   python 2.1.Select_BestCFR.py -n 300
@@ -150,7 +145,4 @@
   
   9. Run [`2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb`](./2.Analysis/3.1.Performance_Comparison_by_Clustering_Size.ipynb) in Jupyter notebook.
 
-  10. For additional statistical analisys with the main model, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb) in Jupyter notebook.
-
-  
-(작성중)
+  10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipnb) in Jupyter notebook.
