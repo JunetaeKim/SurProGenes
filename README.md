@@ -16,7 +16,7 @@
   <img src="./2.Analysis/Models/Model_figures/fig_sem_mechanism.png" width="500"/>
   </p>
 
-  $$loss_{GX}=\frac{1}{PG}\sum_{p=1}^{P}{\sum_{g=1}^{G}{(GX_{p,g}-\widehat{WGX}_{p,g})^2}}\qquad (eq. 4)$$
+  $$loss_{GX}=\frac{1}{PG}\sum_{p=1}^{P}{\sum_{g=1}^{G}{(GX_{p,g}-\widehat{WGX}_{p,g})^2}}$$
 
 ### Risk-Ordering Mechanism (ROM)
 
@@ -25,31 +25,27 @@
   <img src="./2.Analysis/Models/Model_figures/fig_prom.png" width="500"/>
   </p>
 
-  $$Rloss_{pat}=\frac{1}{P^2}\sum_{i=1}^{P}{\sum_{j=1}^{P}{PRM_{i,j}(DTL_{i,j}-PED_{i,j})^2}}\qquad (eq. 6)$$
+  $$Rloss_{pat}=\frac{1}{P^2}\sum_{i=1}^{P}{\sum_{j=1}^{P}{PRM_{i,j}(DTL_{i,j}-PED_{i,j})^2}}$$
 
 2. Gene-oriented ROM (GROM)
   <p align="center">
-  <img src="./2.Analysis/Models/Model_figures/fig_grom.png" width="500"/>
+  <img src="./2.Analysis/Models/Model_figures/fig_grom.png" alt width="500"/>
+  <em>GROM</em>
+  <img src="./2.Analysis/Models/Model_figures/fig_acam.png" width="400"/>
+  <em>ACAM</em>
   </p>
-
-  $$Rloss_{gene}=\frac{1}{G^2}\sum_{i=1}^{G}{\sum_{j=1}^{G}{(GLDeud_{i,j}-GED_{i,j})^2}}\qquad (eq. 7)$$
-
-2-1. ArcCosine angle Adjustment Mechanism (ACAM)
-  <p align="center">
-  <img src="./2.Analysis/Models/Model_figures/fig_acam.png" width="500"/>
-  </p>
-
-  $$\overline{Rloss}_{gene}=\frac{1}{G^2}\sum_{i=1}^{G}{\sum_{j=1}^{G}{(\overline{GLD}eud_{i,j}-GED_{i,j})^2}}\qquad (eq. 11)$$
+  
+  $$Rloss_{gene}=\frac{1}{G^2}\sum_{i=1}^{G}{\sum_{j=1}^{G}{(GLDeud_{i,j}-GED_{i,j})^2}}$$
 
 ### Dichotomization & Clustering Mechanism
 
-  $$CHloss_{gene}=\frac{1}{G}\sum_{g=1}^{G}{\max{(D_{\theta}(GEM_{g},GCM)-\xi_{1},0)}}\qquad (eq. 14)$$
+  $$CHloss_{gene}=\frac{1}{G}\sum_{g=1}^{G}{\max{(D_{\theta}(GEM_{g},GCM)-\xi_{1},0)}}$$
 
-  $$CHloss_{pat}=\frac{1}{P}\sum_{p=1}^{P}{\max{(D_{\theta}(PEM_{p},PCM)-\xi_{2},0)}}\qquad (eq. 15)$$
+  $$CHloss_{pat}=\frac{1}{P}\sum_{p=1}^{P}{\max{(D_{\theta}(PEM_{p},PCM)-\xi_{2},0)}}$$
   
-  $$SPloss_{gene}=\frac{1}{C^G}\sum_{i=1}^{C^G}{\max{(\xi_{3}-(D_{\theta}^{s}(GCM))_{i},0)}}\qquad (eq. 16)$$
+  $$SPloss_{gene}=\frac{1}{C^G}\sum_{i=1}^{C^G}{\max{(\xi_{3}-(D_{\theta}^{s}(GCM))_{i},0)}}$$
   
-  $$SPloss_{pat}=\frac{1}{C^P}\sum_{i=1}^{C^P}{\max{(\xi_{3}-(D_{\theta}^{s}(PCM))_{i},0)}}\qquad (eq. 17)$$
+  $$SPloss_{pat}=\frac{1}{C^P}\sum_{i=1}^{C^P}{\max{(\xi_{3}-(D_{\theta}^{s}(PCM))_{i},0)}}$$
 
 
 ## Data processing
