@@ -2,8 +2,8 @@
 # ModelID = 'M04' # Model ID
 # WeightID = 'W1' # Weight ID for ACAM
 # NumGene_CL = 500 # The max number of genes to select for evaluation, denoted as Kn in the manuscript.
-pCutoff = 0.005 # COX hazard model significance criteria to select learning results during priority-based model selection.
-NmodEachG = 1 # The number of best models to select for each independent learning during priority-based model selection.
+pCutoff = 0.005 # COX hazard model significance criteria to select learning results during model selection.
+NmodEachG = 1 # The number of best models to select for each independent learning during model selection.
 
 
 # Path setting
