@@ -6,7 +6,7 @@
 
 
 ## Model
-  We propose a collaborative filtering-derived mechanism to represent patients in order of their survival risk and dichotomize them. The model consists of three novel mechanisms.
+  We propose a collaborative filtering-derived mechanism to represent patients in order of their survival risk and dichotomize them. The model consists of three novel mechanisms. The code for the main model is provided in [`RCFR_AC.py`](./2.Analysis/Models/RCFR_AC.py).
   <p align="center">
   <img src="./2.Analysis/Models/Model_figures/fig_model_outline.png" width="600"/>
   </p>
