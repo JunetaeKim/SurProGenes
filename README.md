@@ -136,9 +136,26 @@
   python 2.2.Select_BestRCFR_NoGROM.py -n 900
   python 2.3.Select_BestRCFR.py -n 300
   python 2.3.Select_BestRCFR.py -n 500
-  .
-  .
-  .
+  python 2.3.Select_BestRCFR.py -n 700
+  python 2.3.Select_BestRCFR.py -n 900
+  python 2.4.Select_BestRCFR_AC_NoCL.py -w W3 -n 300
+  python 2.4.Select_BestRCFR_AC_NoCL.py -w W3 -n 500
+  python 2.4.Select_BestRCFR_AC_NoCL.py -w W3 -n 700
+  python 2.4.Select_BestRCFR_AC_NoCL.py -w W3 -n 900
+  python 2.5.Select_BestRCFR_AC_Nosim.py -w W3 -n 300
+  python 2.5.Select_BestRCFR_AC_Nosim.py -w W3 -n 500
+  python 2.5.Select_BestRCFR_AC_Nosim.py -w W3 -n 700
+  python 2.5.Select_BestRCFR_AC_Nosim.py -w W3 -n 900
+  python 2.6.Select_BestRCFR_AC.py -m M06 -w W1 -n 300
+  python 2.6.Select_BestRCFR_AC.py -m M06 -w W1 -n 500
+  python 2.6.Select_BestRCFR_AC.py -m M06 -w W1 -n 700
+  python 2.6.Select_BestRCFR_AC.py -m M06 -w W1 -n 900
+  python 2.6.Select_BestRCFR_AC.py -m M07 -w W2 -n 300
+  python 2.6.Select_BestRCFR_AC.py -m M07 -w W2 -n 500
+  python 2.6.Select_BestRCFR_AC.py -m M07 -w W2 -n 700
+  python 2.6.Select_BestRCFR_AC.py -m M07 -w W2 -n 900
+  python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 300
+  python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 500
   python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 700
   python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 900
   ```
