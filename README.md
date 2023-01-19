@@ -124,7 +124,7 @@
 
 #### Additional experiments
 
-  8. For *performance comparison by candidate size*, run model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
+  8. For *performance comparison by candidate sizes*, run model selection files in [`2.Analysis/`](./2.Analysis/) as follows:
 
   ```
   python 2.1.Select_BestCFR.py -n 300
