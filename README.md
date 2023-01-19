@@ -164,4 +164,4 @@
   
   9. Run [`2.Analysis/3.2.Performance_Comparison_by_Candidate_Size.ipynb`](./2.Analysis/3.2.Performance_Comparison_by_Candidate_Size.ipynb) in Jupyter notebook.
 
-  10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb) in Jupyter notebook. For readers interested only in statistical analysis, skipping the time-consuming model training and best model selection procedures, the authors have uploaded the results for both procedures.
+  10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb) in Jupyter notebook. For readers interested only in statistical analysis, skipping the time-consuming model training and best model selection procedures, the authors have uploaded the results for both procedures in [`2.Analysis/EvalResults`](./2.Analysis/EvalResults).
