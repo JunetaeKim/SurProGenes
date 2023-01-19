@@ -74,10 +74,6 @@
 
   1. Clone the repository.
   
-  ```
-  git clone https://github.com/JuntaeKim/SurProGenes.git
-  ```
-  
   2. Create a conda environment with all necessary libraries in **Prerequisites**.
 
 #### Data processing
