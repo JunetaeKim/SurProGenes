@@ -119,7 +119,8 @@
   python 2.6.Select_BestRCFR_AC.py -m M08 -w W3 -n 100
   ```
   
-  7. Run [`2.Analysis/3.1.Performance_Comparison.ipynb`](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can get evaluation results including [`Performance Table`](./2.Analysis/EvalResults/PerformanceTable.csv).
+  7. Run [`2.Analysis/3.1.Performance_Comparison.ipynb`](./2.Analysis/3.1.Performance_Comparison.ipynb) in Juypter notebook. Then, you can get evaluation results including [`Performance Table`](./2.Analysis/EvalResults/PerformanceTable.csv). For readers interested only in statistical analysis, skipping the time-consuming model training and best model selection procedures, the authors have uploaded the results for both procedures.
+
 
 
 #### Additional experiments
@@ -163,4 +164,4 @@
   
   9. Run [`2.Analysis/3.2.Performance_Comparison_by_Candidate_Size.ipynb`](./2.Analysis/3.2.Performance_Comparison_by_Candidate_Size.ipynb) in Jupyter notebook.
 
-  10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb) in Jupyter notebook.
+  10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb) in Jupyter notebook. For readers interested only in statistical analysis, skipping the time-consuming model training and best model selection procedures, the authors have uploaded the results for both procedures.
