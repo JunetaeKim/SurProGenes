@@ -59,7 +59,6 @@
   * python (v3.8)
   * numpy (v1.19)
   * tensorflow (v2.4)
-  * tensorflow-gpu (v2.4)
   * jupyter
   * lifelines
   * matplotlib
