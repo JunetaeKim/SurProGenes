@@ -2,7 +2,7 @@
 
   This repository provides the Python codes to implement the experiments in
   _**SurProGenes: Survival Risk-Ordered Representation of Cancer Patients and Genes for the Identification of Prognostic Genes**_.
-  This paper suggests a framework that recommends individual prognostic genes by integrating representation learning and statistical analysis. The study has been accepted as a poster presentation at ICML 2023. The authors are currently working on the camera-ready version of the paper and plan to provide a link to the full text in the near future.
+  This paper suggests a framework that recommends individual prognostic genes by integrating representation learning and statistical analysis. The study has been accepted as a poster presentation at [ICML 2023](https://icml.cc/Conferences/2023/Dates). The authors are currently working on the camera-ready version of the paper and plan to provide a link to the full text in the near future.
 
 
 ## Model
