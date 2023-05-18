@@ -165,3 +165,11 @@
   9. Run [`2.Analysis/3.2.Performance_Comparison_by_Candidate_Size.ipynb`](./2.Analysis/3.2.Performance_Comparison_by_Candidate_Size.ipynb) in Jupyter notebook.
 
   10. For *statistical analisys with the main model*, run [`2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb`](./2.Analysis/4.1.BestRCFR_AC_PostEval.ipynb) in Jupyter notebook. For readers interested only in statistical analysis, skipping the time-consuming model training and best model selection procedures, the authors have uploaded the results for both procedures in [`2.Analysis/ModelResults`](./2.Analysis/ModelResults).
+
+
+## Notice: Your Contributions to Enhancing Our Gene Analysis Algorithm
+We appreciate your interest in our gene expression algorithm and its potential for dichotomizing patients based on survival risk while simultaneously recommending genomes that create significant differences between the dichotomized groups. We recognize that our preliminary method, particularly our Similarity-based Embedding Mechanism (SEM), may not fully account for certain genes with similar expression levels in both groups under study. However, we see this not as a limitation, but an opportunity for us to advance and refine our approach.
+
+We want to emphasize that our Patient-Oriented Risk Ordering Mechanism (PROM) has demonstrated robustness and reliability, reinforcing our confidence in the overall value of our work. We are committed to improving our methodology to more effectively address the intricacies of gene expression scenarios, and we have a firm belief in the bright future of this research.
+
+We wholeheartedly welcome your constructive feedback and suggestions. Please do not hesitate to share your insights with us. By working together, we can fine-tune this promising algorithm.
