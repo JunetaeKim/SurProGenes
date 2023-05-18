@@ -170,7 +170,7 @@
 
 ## Notice
 #### Your Contributions to Enhancing Our Gene Analysis Algorithm
-We appreciate your interest in our gene expression algorithm and its potential for dichotomizing patients based on survival risk while simultaneously recommending genomes that create significant differences between the dichotomized groups. We recognize that our preliminary method, particularly our Similarity-based Embedding Mechanism (SEM), may not fully account for certain genes with similar expression levels in both groups under study. However, we see this not as a limitation, but an opportunity for us to advance and refine our approach.
+We appreciate your interest in our gene expression algorithm and its potential for dichotomizing patients based on survival risk while simultaneously recommending genomes that create significant differences between the dichotomized groups. We recognize that our preliminary method, particularly our Similarity-based Embedding Mechanism (SEM), may not fully account for certain genes with similar expression levels in both groups. However, we perceive this not merely as a limitation but rather as a valuable opportunity to further refine and enhance our approach.
 
 We want to emphasize that our Patient-Oriented Risk Ordering Mechanism (PROM) has demonstrated robustness and reliability, reinforcing our confidence in the overall value of our work. We are committed to improving our methodology to more effectively address the intricacies of gene expression scenarios, and we have a firm belief in the bright future of this research.
 
